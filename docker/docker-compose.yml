@@ -1,0 +1,17 @@
+services:
+  ocr:
+    build: .
+    image: unlimited-ocr-transformers:latest
+    gpus: all                      # cần Docker Compose v2 + nvidia-container-toolkit
+    volumes:
+      - ./hf_cache:/workspace/hf_cache   # cache weights (~7GB) giữa các lần chạy
+      - ./data:/workspace/data           # đặt file PDF của bạn vào đây
+      - ./outputs:/workspace/outputs     # kết quả .md
+    # Mặc định: OCR 4 trang đầu của PDF mẫu. Đổi tên file/tham số tùy ý.
+    command:
+      - "--pdf"
+      - "/workspace/data/Nihongo Sou Matome N1 Dokkai.pdf"
+      - "--max_pages"
+      - "4"
+      - "--image_mode"
+      - "base"
